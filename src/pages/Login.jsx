@@ -1,61 +1,80 @@
-import { useContext } from 'react';
-import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
-import { AppContext } from '../components/stateprovider';
+import "../styles/login.css";
+
+import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { AppContext } from "../components/stateprovider";
+import { useContext } from "react";
 
 export default function Login() {
-	const { setState } = useContext(AppContext);
-	const { register, handleSubmit } = useForm();
-	const history = useHistory();
 
-	const login = ({ email, password }) => {
-		// get the users data
-		const user = localStorage.getItem(email);
+  const {setState} = useContext(AppContext)
+  const { register, handleSubmit } = useForm();
+  const history = useHistory();
 
-		if (!user) {
-			return alert('An account for this email was not found');
-		}
+  const login = ({ email, password }) => {
+    const user = localStorage.getItem(email);
+    if (!user) {
+      return alert("This email is not registered with us");
+    }
+  
+    const userdata = JSON.parse(user);
+    if (password !== userdata.password) {
+      return alert("Email or password incorrect");
+    }
+    alert('Login successful')
 
-		const userdata = JSON.parse(user);
-		console.log(userdata);
+   setState(prevValue => {
+      return {
+        ...prevValue,
+        isloggedin:true,
+        userEmail: userdata.email,
+        userId: userdata.userId
+      };
+    });
+  
+  history.push("/home");
+  };
+  return (
+    <div className="login-form-container">
+      <div className="login-form">
+        <h2 className="title">Login</h2>
+        <form onSubmit={handleSubmit(login)}>
+          <div className="input-container c1">
+            <input
+              id="email"
+              className="input"
+              type="text"
+              required
+              {...register("email")}
+              placeholder=" "
+            />
 
-		if (password !== userdata.password) {
-			return alert('email or password was incorrect');
-		}
+            <div className="cut" />
+            <label htmlFor="Email" className="placeholder">
+              Email
+            </label>
+          </div>
+          <div className="input-container c2">
+            <input
+              id="password"
+              className="input"
+              type="password"
+              required
+              {...register("password")}
+              placeholder=" "
+            />
+            <div className="cut" />
+            <label htmlFor="Password" className="placeholder">
+              Password
+            </label>
+          </div>
 
-		alert('login successfull');
-		setState(prevstate => {
-			return {
-				...prevstate,
-				isLoggedIn: true,
-				userId: userdata.userId,
-				userEmail: userdata.email,
-			};
-		});
-		history.push('/home');
-	};
+          <button type="submit" className="submit">
+            Sign In
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
-	return (
-		<>
-			<form onSubmit={handleSubmit(login)}>
-				<div>
-					<input
-						type='text'
-						placeholder='email'
-						required
-						{...register('email')}
-					/>
-				</div>
-				<div>
-					<input
-						type='password'
-						placeholder='password'
-						required
-						{...register('password')}
-					/>
-				</div>
-				<input type='submit' value='Login' />
-			</form>
-		</>
-	);
-}

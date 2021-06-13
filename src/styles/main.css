@@ -13,6 +13,7 @@
 }
 
 body {
+	background-color: ghostwhite;
 	margin: 0;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
 		'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
@@ -30,7 +31,7 @@ body {
 ============================================
  */
 a {
-	color: blue;
+	color: rgb(71, 71, 75);
 }
 
 input,
@@ -43,17 +44,6 @@ button {
 	border-radius: 0.2rem;
 }
 
-form {
-	width: 100%;
-}
-
-form > * {
-	width: 100%;
-}
-
-button {
-	border: none;
-}
 
 /* 
 ============================================
@@ -63,18 +53,55 @@ button {
 ============================================
  */
 .grid-4-layout {
-	max-width: 1160px;
+	max-width: 80vw;
 	width: 100%;
 	margin: auto;
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: repeat(2, 1fr);
 	gap: 10px;
+}
+
+.todo-list-container {
+  background-color: ghostwhite;
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 0 5px 5px 1px rgb(179, 175, 175);
+  padding: 15px;
+  height: 100%;
+  min-height: 40vh;
+  width: 80vw;
+  margin: auto;
+  margin-top: 30px;
+  text-align: start;
+}
+.todo-form-container {
+  background-color: ghostwhite;
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 0 5px 5px 1px rgb(179, 175, 175);
+  padding: 50px 10px;
+  height: 100%;
+  min-height: 40vh;
+  width: 40%;
+  margin: auto;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.form-submit-btn {
+	margin: 20px 10px;
+	border: 0;
+	box-shadow: 0 2px 2px 1px rgb(179, 175, 175);
+}
+
+.form-submit-btn:hover{
+	background-color: rgb(209, 208, 208);
 }
 
 .card {
 	display: inline-block;
-	max-width: 330px;
-	background-color: #ddd;
+	max-width: 300px;
+	background-color: ghostwhite;
 	border: 1px solid #999;
 	border-radius: 0.2em;
 	padding: 1em;
@@ -91,10 +118,10 @@ button {
 
 .card-title {
 	color: #333;
-	font-weight: 700;
+	font-weight: 500;
 }
 
-.form-container {
+/* .form-container {
 	width: 400px;
 	margin: 30px auto;
 }
@@ -113,4 +140,4 @@ button {
 
 .btn-primary:hover {
 	background-color: rgb(39, 104, 39);
-}
+} */

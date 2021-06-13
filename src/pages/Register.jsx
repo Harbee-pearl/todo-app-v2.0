@@ -1,103 +1,104 @@
-import { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { AppContext } from '../components/stateprovider';
-// import styles
-import '../styles/register.css';
+import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useContext } from "react";
+
+import { AppContext } from "../components/stateprovider";
+
+import "../styles/register.css";
 
 const Register = () => {
-	const { register, handleSubmit } = useForm();
-	const { state, setState } = useContext(AppContext);
-	const history = useHistory();
+  const { register, handleSubmit } = useForm();
+  const { setState} = useContext(AppContext);
 
-	function registerUser({ email, password, confirmPassword }) {
-		if (!email) {
-			return alert(`please provide an email`);
-		}
-		if (password !== confirmPassword) {
-			return alert(`passwords don't match`);
-		}
-		let userFound = localStorage.getItem(email);
-		console.log(userFound);
-		if (userFound) {
-			return alert('this user has already been registered');
-		}
-		// create new user object and save it to local storage
-		const newUser = {
-			email: email,
-			password: password,
-			userId: Date.now(),
-		};
-		// save the users data for accessing later
-		localStorage.setItem(email, JSON.stringify(newUser));
+  const history = useHistory();
 
-		alert('user registered');
-		setState(prevValue => {
-			return {
-				...prevValue,
-				isLoggedIn: true,
-				userId: newUser.userId,
-				userEmail: newUser.email,
-			};
-		});
-		history.push('/home');
-	}
+  const registerUser = ({ email, password, confirmPassword }) => {
+    if (password !== confirmPassword) {
+      return alert("The password entered does not match");
+    }
 
-	return (
-		<>
-			<div className='container__child signup__form'>
-				<form onSubmit={handleSubmit(registerUser)}>
-					<div className='form-group'>
-						<label htmlFor='email'>Email</label>
-						<input
-							className='form-control'
-							type='text'
-							name='email'
-							id='email'
-							placeholder='james.bond@spectre.com'
-							{...register('email', { required: true })}
-						/>
-					</div>
-					<div className='form-group'>
-						<label htmlFor='password'>Password</label>
-						<input
-							className='form-control'
-							type='password'
-							name='password'
-							id='password'
-							placeholder='********'
-							{...register('password', { required: true })}
-						/>
-					</div>
-					<div className='form-group'>
-						<label htmlFor='passwordRepeat'>Repeat Password</label>
-						<input
-							className='form-control'
-							type='password'
-							name='passwordRepeat'
-							id='passwordRepeat'
-							placeholder='********'
-							{...register('confirmPassword', { required: true })}
-						/>
-					</div>
-					<div className='m-t-lg'>
-						<ul className='list-inline'>
-							<li>
-								<button className='btn btn--form' type='submit'>
-									Register
-								</button>
-							</li>
-							<li>
-								<a className='signup__link' href='/login'>
-									I already have an account
-								</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-		</>
-	);
+    // This searches the local storage for the email and does not register if the email already exists
+    let userfound = localStorage.getItem(email);
+    if (userfound) {
+      return alert("This email has been registered before");
+    }
+    // creates a new user object and saves it to local storage
+    const newuser = {
+      email: email,
+      password: password,
+      userId: Date.now(),
+    };
+    localStorage.setItem(email, JSON.stringify(newuser));
+    alert("Registration successful");
+
+    setState(prevValue => {
+      return {
+        ...prevValue,
+        isloggedin:true,
+        userEmail: newuser.email,
+        userId: newuser.userId
+      };
+    });
+
+    history.push("/home");
+  };
+
+  return (
+    <div className="register-form-container">
+      <div className="form">
+        <div className="register-title">Welcome</div>
+        <div className="subtitle">Let's create your account!</div>
+        <form onSubmit={handleSubmit(registerUser)}>
+          <div className="input-container ic1">
+            <input
+              id="email"
+              className="input"
+              type="text"
+              {...register("email", { required: true })}
+              placeholder=" "
+            />
+
+            <div className="cut" />
+            <label htmlFor="Email" className="placeholder">
+              Email
+            </label>
+          </div>
+          <div className="input-container ic2">
+            <input
+              id="password"
+              className="input"
+              type="password"
+              {...register("password", { required: true })}
+              placeholder=" "
+            />
+            <div className="cut" />
+            <label htmlFor="Password" className="placeholder">
+              Password
+            </label>
+          </div>
+          <div className="input-container ic2">
+            <input
+              id="confirm-password"
+              className="input"
+              type="password"
+              {...register("confirmPassword", { required: true })}
+              placeholder=" "
+            />
+            <div className="cut" />
+            <label htmlFor="Password" className="placeholder">
+              Confirm Password
+            </label>
+          </div>
+          <button type="submit" className="submit">
+            Sign Up
+          </button>
+        </form>
+        <a className="login-link" href="/login">
+          I already have an account
+        </a>
+      </div>
+    </div>
+  );
 };
 
 export default Register;

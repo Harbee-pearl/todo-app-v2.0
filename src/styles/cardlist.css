@@ -1,0 +1,14 @@
+li {
+    list-style-type: none;
+    padding-bottom: 10px;
+
+}
+
+.todo-titles{
+    margin-bottom: 5px;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}

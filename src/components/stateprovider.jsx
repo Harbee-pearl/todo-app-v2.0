@@ -1,34 +1,35 @@
-import { createContext, useEffect, useState } from 'react';
 
-export const AppContext = createContext();
 
-const initialState = {
-	isLoggedIn: false,
-	userId: null,
-	userEmail: null,
-	posts: [],
-};
+import { createContext, useEffect, useState } from "react";
 
-export default function StateProvider({ children }) {
-	const [appData, setAppData] = useState(initialState);
+export const AppContext = createContext({});
 
-	useEffect(() => {
-		fetch('https://jsonplaceholder.typicode.com/posts')
-			.then(res => res.json())
-			.then(result => {
-				console.log(result);
-				setAppData(prevValue => {
-					return {
-						...prevValue,
-						posts: result,
-					};
-				});
-			});
-	}, []);
+export default function StateProvider({children}) {
 
-	return (
-		<AppContext.Provider value={{ state: appData, setState: setAppData }}>
-			{children}
-		</AppContext.Provider>
-	);
+    const [appData, setAppData] = useState({
+        isloggedin:false,
+        userId: null,
+        userEmail:null,
+        todos: []
+    })
+
+    useEffect(() => {
+      fetch("https://jsonplaceholder.typicode.com/todos")
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          setAppData((prevValue) => {
+              return {
+                  ...prevValue,
+                  todos:result
+              }
+          })
+        })
+    }, []);
+
+    return(
+        <AppContext.Provider value={{state: appData, setState: setAppData}}>
+            {children}
+        </AppContext.Provider>
+    )
 }
