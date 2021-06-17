@@ -7,38 +7,55 @@ import { useContext } from "react";
 
 export default function Login() {
 
-  const {setState} = useContext(AppContext)
+  const context = useContext(AppContext)
   const { register, handleSubmit } = useForm();
   const history = useHistory();
 
-  const login = ({ email, password }) => {
-    const user = localStorage.getItem(email);
-    if (!user) {
-      return alert("This email is not registered with us");
-    }
-  
-    const userdata = JSON.parse(user);
-    if (password !== userdata.password) {
-      return alert("Email or password incorrect");
-    }
-    alert('Login successful')
+  const loginHandler = ({ email, password }) => {
 
-   setState(prevValue => {
-      return {
-        ...prevValue,
-        isloggedin:true,
-        userEmail: userdata.email,
-        userId: userdata.userId
-      };
-    });
-  
-  history.push("/home");
+   let userdata = {
+			email: email,
+			password: password,
+		};
+
+		fetch(
+			'https://user-manager-three.vercel.app/api/user/login',
+			{
+				method: 'POST',
+				headers: {
+					'content-type': 'application/json',
+				},
+				body: JSON.stringify(userdata),
+			}
+		)
+			.then(res => res.json())
+			.then(result => {
+        console.log(result)
+				if (result.error) {
+					return alert(result.message);
+				}
+        alert("Login successful");
+        
+				context.dispatch({
+					type: 'LOGIN',
+					payload: result.body,
+				});
+
+				history.push("/todopage");
+			})
+			.catch(err => {
+				alert(
+					'Unable to complete request. Please try again after some time'
+				);
+				console.log({ err });
+			});
+	
   };
   return (
     <div className="login-form-container">
       <div className="login-form">
-        <h2 className="title">Login</h2>
-        <form onSubmit={handleSubmit(login)}>
+        <h2 className="login-title">Login</h2>
+        <form onSubmit={handleSubmit(loginHandler)}>
           <div className="input-container c1">
             <input
               id="email"
@@ -48,7 +65,6 @@ export default function Login() {
               {...register("email")}
               placeholder=" "
             />
-
             <div className="cut" />
             <label htmlFor="Email" className="placeholder">
               Email

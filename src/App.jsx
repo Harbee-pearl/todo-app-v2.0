@@ -3,18 +3,16 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import FourOhFour from "./pages/404";
 import Home from "./pages/Home";
-import Todos from "./pages/Todos";
-import UserTodos from "./pages/UserTodos";
+// import UserTodos from "./pages/UserTodos";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import AddTodo from "./pages/AddTodo";
+import TodoPage from "./pages/todopage";
+
 
 import Navbar from "./components/navbar";
 import StateProvider from "./components/stateprovider";
 
-const App = () => {
-
-
+function App() {
 
   return (
     <StateProvider>
@@ -33,21 +31,13 @@ const App = () => {
             <Home />
           </Route>
 
-          <Route exact path="/todos">
-            <Todos />
+          <Route exact path="/todopage">
+            <TodoPage />
           </Route>
 
-          <Route exact path="/addtodo">
-            <AddTodo />
-          </Route>
-
-          <Route exact path="/todos">
-            <Todos />
-          </Route>
-
-          <Route exact path="/usertodos/:userid">
+          {/* <Route exact path="/usertodos/:userid">
             <UserTodos />
-          </Route>
+          </Route> */}
 
           <Route>
             <FourOhFour />

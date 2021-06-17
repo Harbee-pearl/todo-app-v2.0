@@ -1,46 +1,52 @@
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
-
 import { AppContext } from "../components/stateprovider";
 
+// scoped styling imported
 import "../styles/register.css";
 
-const Register = () => {
+function Register() {
   const { register, handleSubmit } = useForm();
-  const { setState} = useContext(AppContext);
-
+  const context = useContext(AppContext);
   const history = useHistory();
 
   const registerUser = ({ email, password, confirmPassword }) => {
+    //  confirm if passowrds entered match
     if (password !== confirmPassword) {
       return alert("The password entered does not match");
     }
 
-    // This searches the local storage for the email and does not register if the email already exists
-    let userfound = localStorage.getItem(email);
-    if (userfound) {
-      return alert("This email has been registered before");
-    }
-    // creates a new user object and saves it to local storage
-    const newuser = {
+    // send a request to the api to register a new user
+    let newuser = {
       email: email,
       password: password,
-      userId: Date.now(),
     };
-    localStorage.setItem(email, JSON.stringify(newuser));
-    alert("Registration successful");
 
-    setState(prevValue => {
-      return {
-        ...prevValue,
-        isloggedin:true,
-        userEmail: newuser.email,
-        userId: newuser.userId
-      };
-    });
+    fetch(`https://user-manager-three.vercel.app/api/user/register`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newuser), 
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.error === true) {
+          return alert(result.message);
+        }
 
-    history.push("/home");
+        context.dispatch({
+          type: "LOGIN",
+          payload: result.body,
+        });
+
+        history.push("/todopage");
+      })
+      .catch((err) => {
+        console.log("this error occurred", err);
+        alert("an error occurred. Please try again later");
+      });
   };
 
   return (
@@ -99,6 +105,6 @@ const Register = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Register;

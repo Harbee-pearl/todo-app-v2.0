@@ -1,34 +1,68 @@
 
+import { createContext, useReducer } from "react";
 
-import { createContext, useEffect, useState } from "react";
+export const AppContext = createContext();
 
-export const AppContext = createContext({});
+function reducer(state, action){
+  // create a copy of your state
+  let stateCopy = { ...state };
+
+  // set the name on our state copy to action
+  stateCopy.action = action;
+
+  // if action.type is ADD_ITEM
+  // add the payload to shoppingList
+  if (action.type === "ADD_ITEM") {
+    stateCopy.todoList.unshift(action.payload);
+  }
+
+  // if action.type is LOGIN
+  // set isUserLoggedIn to true
+  // & set userData to payload
+
+  if (action.type === "LOGIN") {
+    stateCopy.isUserLoggedIn = true;
+    stateCopy.userData = action.payload;
+  }
+
+  // if action.type is LOGOUT
+  // set isUserLoggedIn to false
+  // & set userData to null
+
+  if (action.type === "LOGOUT") {
+    stateCopy.isUserLoggedIn = false;
+    stateCopy.userData = null;
+  }
+
+  return stateCopy;
+};
+
+const initialState = {
+  todoList: [
+    {
+      todo: "Item 1",
+      id: 1,
+    },
+    {
+      todo: "Item 2",
+      id: 2,
+    },
+  ],
+  isUserLoggedIn: false,
+  userData: null,
+};
 
 export default function StateProvider({children}) {
 
-    const [appData, setAppData] = useState({
-        isloggedin:false,
-        userId: null,
-        userEmail:null,
-        todos: []
-    })
+    const [appstate, dispatch] = useReducer(reducer, initialState);
 
-    useEffect(() => {
-      fetch("https://jsonplaceholder.typicode.com/todos")
-        .then((res) => res.json())
-        .then((result) => {
-          console.log(result);
-          setAppData((prevValue) => {
-              return {
-                  ...prevValue,
-                  todos:result
-              }
-          })
-        })
-    }, []);
+    const contextObject = {
+      state: appstate,
+      dispatch: dispatch,
+    };
 
     return(
-        <AppContext.Provider value={{state: appData, setState: setAppData}}>
+        <AppContext.Provider value={contextObject}>
             {children}
         </AppContext.Provider>
     )

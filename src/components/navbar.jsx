@@ -4,33 +4,38 @@ import { Link } from "react-router-dom";
 
 import Styles from "../styles/navbar.module.css";
 
-const Navbar = () => {
+function Navbar() {
 
-  const {state} = useContext(AppContext)
+  const context = useContext(AppContext);
+
+  function logOut(){
+    context.dispatch({
+      type: "LOGOUT",
+    });
+
+  }
+
   return (
     <nav className={Styles.navbar}>
       <Link className={Styles.navlink} to="/home">
         Home
       </Link>
-      <Link className={Styles.navlink} to="/todos">
-        Todos
-      </Link>
-      {!state.isloggedin ? (
+      {context.state.isUserloggedin ? (
+        <>
+          <Link className={Styles.navlink} to="/todopage">
+            Todo Page
+          </Link>
+          <span className={Styles.navlink} onClick={logOut}>
+            Log Out
+          </span>
+        </>
+      ) : (
         <>
           <Link className={Styles.navlink} to="/register">
             Register
           </Link>
           <Link className={Styles.navlink} to="/login">
             Login
-          </Link>
-        </>
-      ) : (
-        <>
-          <Link className={Styles.navlink} to="/addtodo">
-            Add Todo
-          </Link>
-          <Link className={Styles.navlink} to="/login">
-            Log Out
           </Link>
         </>
       )}
