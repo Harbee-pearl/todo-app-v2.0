@@ -1,9 +1,9 @@
-
 import { createContext, useReducer } from "react";
 
 export const AppContext = createContext();
 
 function reducer(state, action){
+
   // create a copy of your state
   let stateCopy = { ...state };
 
@@ -16,6 +16,11 @@ function reducer(state, action){
     stateCopy.todoList.unshift(action.payload);
   }
 
+  if(action.type === "REMOVE_ITEM"){
+	  let list_item = action.payload;
+      stateCopy.todoList.filter(item => item.id !== list_item.id);
+	  console.log(stateCopy.todoList);
+  }
   // if action.type is LOGIN
   // set isUserLoggedIn to true
   // & set userData to payload
@@ -39,14 +44,6 @@ function reducer(state, action){
 
 const initialState = {
   todoList: [
-    {
-      todo: "Item 1",
-      id: 1,
-    },
-    {
-      todo: "Item 2",
-      id: 2,
-    },
   ],
   isUserLoggedIn: false,
   userData: null,

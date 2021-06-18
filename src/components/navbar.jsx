@@ -1,18 +1,20 @@
 import { useContext } from "react";
 import { AppContext } from "./stateprovider";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 
 import Styles from "../styles/navbar.module.css";
 
 function Navbar() {
 
   const context = useContext(AppContext);
+  const history = useHistory();
 
   function logOut(){
     context.dispatch({
       type: "LOGOUT",
     });
-
+    history.push("/login");
   }
 
   return (
@@ -20,7 +22,7 @@ function Navbar() {
       <Link className={Styles.navlink} to="/home">
         Home
       </Link>
-      {context.state.isUserloggedin ? (
+      {context.state.isUserLoggedIn ? (
         <>
           <Link className={Styles.navlink} to="/todopage">
             Todo Page

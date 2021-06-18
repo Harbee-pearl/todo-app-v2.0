@@ -8,7 +8,7 @@ import TodoListItem from '../components/todo-list-item';
 export default function Todos() {
 
 	const context = useContext(AppContext);
-	console.log(context);
+	// console.log(context);
 
 	return (
     <ul className="todo-list-container">

@@ -19,29 +19,12 @@ function App() {
       <Router>
         <Navbar />
         <Switch>
-          <Route exact path="/register">
-            <Register />
-          </Route>
-
-          <Route exact path="/login">
-            <Login />
-          </Route>
-
-          <Route exact path="/home">
-            <Home />
-          </Route>
-
-          <Route exact path="/todopage">
-            <TodoPage />
-          </Route>
-
-          {/* <Route exact path="/usertodos/:userid">
-            <UserTodos />
-          </Route> */}
-
-          <Route>
-            <FourOhFour />
-          </Route>
+          <Route exact path="/register" component={Register}/>
+          <Route exact path="/login" component={Login}/>
+          <Route path="/" exact component={Home}/>
+          <Route path="/home" exact component={Home}/>
+          <Route exact path="/todopage" component={TodoPage}/>
+          <Route component={FourOhFour}/>
         </Switch>
       </Router>
     </StateProvider>
