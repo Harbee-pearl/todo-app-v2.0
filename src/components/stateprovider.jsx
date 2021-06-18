@@ -2,8 +2,7 @@ import { createContext, useReducer } from "react";
 
 export const AppContext = createContext();
 
-function reducer(state, action){
-
+function reducer(state, action) {
   // create a copy of your state
   let stateCopy = { ...state };
 
@@ -16,10 +15,11 @@ function reducer(state, action){
     stateCopy.todoList.unshift(action.payload);
   }
 
-  if(action.type === "REMOVE_ITEM"){
-	  let list_item = action.payload;
-      stateCopy.todoList.filter(item => item.id !== list_item.id);
-	  console.log(stateCopy.todoList);
+  if (action.type === "REMOVE_ITEM") {
+    let list_item = action.payload;
+    stateCopy.todoList = stateCopy.todoList.filter(
+      (item) => item.id !== list_item.id
+    );
   }
   // if action.type is LOGIN
   // set isUserLoggedIn to true
@@ -40,27 +40,23 @@ function reducer(state, action){
   }
 
   return stateCopy;
-};
+}
 
 const initialState = {
-  todoList: [
-  ],
+  todoList: [],
   isUserLoggedIn: false,
   userData: null,
 };
 
-export default function StateProvider({children}) {
+export default function StateProvider({ children }) {
+  const [appstate, dispatch] = useReducer(reducer, initialState);
 
-    const [appstate, dispatch] = useReducer(reducer, initialState);
+  const contextObject = {
+    state: appstate,
+    dispatch: dispatch,
+  };
 
-    const contextObject = {
-      state: appstate,
-      dispatch: dispatch,
-    };
-
-    return(
-        <AppContext.Provider value={contextObject}>
-            {children}
-        </AppContext.Provider>
-    )
+  return (
+    <AppContext.Provider value={contextObject}>{children}</AppContext.Provider>
+  );
 }
